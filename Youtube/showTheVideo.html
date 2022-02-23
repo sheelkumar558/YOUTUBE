@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <style>
+    body {
+      background-color: aliceblue;
+    }
+    #navbar {
+      padding: 3px;
+      width: 100%;
+      margin: auto;
+      color: red;
+      text-align: center;
+      background-color: rgb(121, 89, 89);
+      margin-bottom: 30px;
+    }
+    #container{
+        width: 70%;
+        height: 700px;
+        margin: auto;
+        
+    }
+    a{
+        font-size: 20px;
+        color: white;
+        text-decoration: none;
+        font-family: sans-serif;
+    }
+  </style>
+  <body>
+    <div id="navbar">
+     <h1>YOUTUBE</h1>
+     <a href="index.html">HOME</a>
+    </div>
+    <div id="container"></div>
+  </body>
+</html>
+<script>
+  //localStorage.setItem("clickedVideo", JSON.stringify(videoData));
+
+  const videoData = JSON.parse(localStorage.getItem("clickedVideo"));
+  let container = document.getElementById("container");
+
+  let iframe = document.createElement("iframe");
+  iframe.src = `https://www.youtube.com/embed/${videoData.videoId}`;
+  iframe.setAttribute("allowfullscreen", true);
+  iframe.width = "70%";
+  iframe.height="60%";
+
+  container.append(iframe);
+</script>

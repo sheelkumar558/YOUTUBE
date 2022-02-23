@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <style>
+    body {
+      background-color: aliceblue;
+    }
+    #navbar {
+      padding: 20px;
+      width: 100%;
+      margin: auto;
+      text-align: center;
+      background-color: rgb(121, 89, 89);
+    }
+    #searchbar {
+      width: 20%;
+      height: 30px;
+      border-radius: 9px;
+    }
+    #searchbtn {
+      margin-left: 6px;
+      width: 9%;
+      height: 30px;
+      background-color: red;
+      color: white;
+      border-radius: 15px;
+    }
+    #searchResult{
+        padding: 20px;
+        display: grid;
+        width: 90%;
+        margin: auto;
+        grid-template-columns: repeat(4,1fr);
+        gap: 20px;
+    }
+    #searchResult > div{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #cecece;
+        padding: 10px;
+        text-align: center;
+        font-family: sans-serif;
+    }
+  
+  </style>
+  <body>
+    <div id="navbar">
+      <div>
+        <input type="text" id="searchbar" placeholder="Search Videos" />
+        <button id="searchbtn" onclick="searchVideos()">search</button>
+      </div>
+      <div></div>
+    </div>
+    <div id="searchResult"></div>
+  </body>
+</html>
+<script>
+  let key = "AIzaSyCeJovz40hyj_QSxANoHjmqmWcRx3dG76Q";
+  
+
+  async function searchVideos() {
+    try {
+      let userInput = document.getElementById("searchbar").value;
+      let res = await fetch(
+        `https://www.googleapis.com/youtube/v3/search?key=${key}&q=${userInput}&type=video&maxResults=30&part=snippet`
+      );
+      let data = await res.json();
+      console.log(data);
+      let videoList = data.items;
+      appendVideo(videoList);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+  let searchResult = document.getElementById("searchResult");
+  function appendVideo(d) {
+    console.log("d:", d);
+    searchResult.innerHTML = "";
+    d.forEach(({ id: { videoId }, snippet }) => {
+      let imgUrl = snippet.thumbnails.medium.url;
+
+      //console.log(imgUrl);
+      let div = document.createElement("div");
+      let videoData = {
+        snippet,
+        videoId,
+      };
+        div.onclick= () =>{
+            showVideo(videoData);
+        }
+
+        let img=document.createElement('img');
+        img.src= imgUrl;
+
+        let p=document.createElement('p');
+        p.innerText=snippet.title;
+
+        div.append(img,p);
+        searchResult.append(div);
+
+    });
+  }
+const  showVideo =  (videoData) =>{
+    localStorage.setItem("clickedVideo", JSON.stringify(videoData));
+    window.open("showTheVideo.html");
+}
+
+
+</script>
